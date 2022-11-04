@@ -1,0 +1,100 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
+  font-family: "Roboto", sans-serif;
+  /* Environment variables */
+  --color-one: #191e3a;
+  --back-hover: #81a7cc;
+}
+
+/* Header styles */
+
+.header {
+  position: relative;
+}
+
+/* Icons */
+
+.icon-gral {
+  font-size: 2rem;
+  color: var(--color-one);
+}
+
+.container-icons-link {
+  margin: 0 10px;
+  border-radius: 20%;
+}
+
+.container-icons-link:hover {
+  /* background-color: rgb(38, 36, 36); */
+  /* background-color: var(--color-one); */
+  cursor: pointer;
+  background-color: #0d6efd;
+}
+
+.container-icons-link:hover .icon-gral {
+  color: #fff;
+}
+
+/* Title */
+
+.grid {
+  display: grid;
+  grid-template-columns: 25% 75%;
+  align-items: center;
+}
+
+.fs-title {
+  font-size: 35px;
+  color: var(--color-one);
+}
+
+/* Search users */
+
+.grid-search{
+  display: grid;
+  align-items: center;
+}
+
+.go-to-profile:hover{
+
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.profile-img-search{
+
+  width:70px;
+  height: 70px;
+  object-fit: scale-down;
+}
+
+.grapper-searchs{
+  display: grid;
+  grid-template-columns: 50% 40%;
+
+  margin: auto;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+}
+
+.grapper-results-search{
+
+  position: absolute;
+  top: 3rem;
+  z-index: 1;
+  width: 100%;
+
+  background-color: #fff;
+}
+
+.hidden{
+
+  display: none;
+}
