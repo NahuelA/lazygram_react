@@ -153,7 +153,9 @@ function HeadMenu() {
                 {/* Profile */}
                 <li className="nav-item">
                   <Link
-                    to={`/profile/${window.localStorage.getItem("profile_auth")}`}
+                    to={`/profile/${window.localStorage.getItem(
+                      "profile_auth"
+                    )}`}
                     title="profile"
                   >
                     <span className="nav-link container-icons-link">
@@ -174,26 +176,41 @@ function HeadMenu() {
                 {/* Logout */}
                 <li
                   className="nav-item"
-                  onClick={() => {
-                    lgApi({
-                      url: "http://localhost:8000/accounts/logout/",
-                      method: "post",
-                      headers: {
-                        "Content-Type": "multipart/form-data",
-                        Authorization: caches.has("refresh_token"),
-                      },
+                  onClick={async () => {
+                    await caches.open("access_token").then(async (access) => {
+                      await access
+                        .match("/access_token")
+                        .then(async (token) => {
+                          await token.json().then(async (accessToken) => {
+                            // Logout
+                            await lgApi({
+                              url: "http://localhost:8000/accounts/logout/",
+                              method: "post",
+                              headers: {
+                                "Content-Type": "multipart/form-data",
+                                Authorization: "Bearer " + String(accessToken),
+                              },
 
-                      withCredentials: true,
-                    })
-                      .then(({ res }) => {
-                        console.log(res);
-                        caches.delete("refresh_token");
-                        window.localStorage.removeItem("profile_auth");
-                        window.localStorage.removeItem("current_profile");
-                      })
-                      .catch(({ err }) => {
-                        console.error(err);
-                      });
+                              withCredentials: true,
+                            })
+                              .then(({ res }) => {
+                                console.log(res);
+                                // Remove authenticated user in local storage
+                                window.localStorage.removeItem("profile_auth");
+                                window.localStorage.removeItem(
+                                  "current_profile"
+                                );
+                              })
+                              .catch(({ err }) => {
+                                console.error(err);
+                              });
+                          });
+                        });
+                    });
+
+                    // Delete tokens in cache
+                    await caches.delete("refresh_token");
+                    await caches.delete("access_token");
                   }}
                 >
                   <Link to="/login" title="logout">
