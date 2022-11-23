@@ -1,6 +1,5 @@
-import { lg_api } from "../../__modules__";
+import { lgApi } from "../../__modules__";
 import "../../css/posts/ListPosts.css";
-import { showSearchProfiles } from "../../apps/users/showSearchProfiles";
 
 // Handle errors
 
@@ -124,7 +123,7 @@ function addInvalidCreatePost(err, target) {
 function searchProfile(value) {
   let token = window.localStorage.getItem("token");
   console.log(value);
-  lg_api("accounts/profile/", {
+  lgApi("accounts/profile/", {
     headers: {
       Authorization: `Token ${token}`,
     },
