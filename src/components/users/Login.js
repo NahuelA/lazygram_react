@@ -2,13 +2,18 @@
 
 import { lgApi } from "../../__modules__";
 import "../../css/users/Login.css";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { addCache } from "../../utils/users/cache";
 import { Link } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
+import AuthContext from "../../context/AuthContext";
+import axios from "axios";
 
 const Login = () => {
   const [errors, setErrors] = useState([]);
   const img = "http://localhost:8000/media/logo_instagram.png";
+  const { retrieveAccessToken, accessToken } = useContext(AuthContext);
+  const cancelToken = axios.CancelToken.source();
 
   const loginSubmit = async (e) => {
     e.preventDefault();
@@ -27,9 +32,19 @@ const Login = () => {
     })
       .then(({ data }) => {
         // Set in localStorage the username from authenticated user.
-        addCache("access_token", "http://localhost:8000/", data.access);
-        addCache("refresh_token", "http://localhost:8000/", data.refresh);
-        window.localStorage.setItem("profile_auth", data.user);
+        console.log(data);
+        addCache(
+          "access_token",
+          "http://localhost:3000/access_token",
+          data.access
+        );
+        addCache(
+          "refresh_token",
+          "http://localhost:3000/refresh_token",
+          data.refresh
+        );
+
+        window.localStorage.setItem("profile_auth", data.username);
       })
       .catch((err) => {
         setErrors([err.response.data]);
@@ -38,7 +53,17 @@ const Login = () => {
       });
   };
 
-  return (
+  useEffect(() => {
+    retrieveAccessToken();
+
+    return () => {
+      cancelToken.cancel();
+    };
+  }, []);
+
+  return accessToken !== undefined ? (
+    <Navigate to={"/"} />
+  ) : (
     <main>
       <section className="login">
         <div className="logo">
@@ -100,6 +125,12 @@ const Login = () => {
                 </button>
               </div>
               <div className="mx-auto">
+                <Link to={"/forgot-password"}>
+                  <span className="dont-account">
+                    Did you forget your password?
+                  </span>
+                </Link>
+                <br />
                 <Link to={"/register"}>
                   <span className="dont-account">
                     Don't have an account? register now!

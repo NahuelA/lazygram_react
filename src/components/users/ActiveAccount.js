@@ -1,11 +1,12 @@
 // Verify token.
 
-import { lg_api, addInvalidToken } from "../../__modules__";
+import { lgApi, addInvalidToken } from "../../__modules__";
 import React from "react";
 import "../../css/users/Verify.css";
 import { BsFillExclamationSquareFill } from "react-icons/bs";
+import { addCache } from "../../utils/users/cache";
 
-class VerifyToken extends React.Component {
+class RefreshToken extends React.Component {
   constructor() {
     super();
     this.state = { token: "" };
@@ -14,20 +15,22 @@ class VerifyToken extends React.Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-    let token_data = new FormData();
-    let new_token = document.querySelector("#id_token");
-    token_data.append("token", new_token.value);
+    let refreshForm = new FormData();
+    let refresh = caches.open("refresh_token").then((cache) => {
+      console.log(cache);
+    });
+    refreshForm.append("token", refresh);
 
-    await lg_api("accounts/verify-account/", {
+    await lgApi("accounts/refresh-token/", {
       method: "post",
-      data: token_data,
+      data: refresh,
     })
       .then((res) => {
         console.log(res.data);
         window.location.hash = "#login";
       })
       .catch((err) => {
-        addInvalidToken(new_token, err.response.data);
+        addInvalidToken(refresh, err.response.data);
       });
   }
 
@@ -64,4 +67,4 @@ class VerifyToken extends React.Component {
   }
 }
 
-export { VerifyToken };
+export { RefreshToken };

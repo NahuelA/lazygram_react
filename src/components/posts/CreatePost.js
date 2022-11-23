@@ -1,6 +1,7 @@
 import React from "react";
-import { lg_api } from "../../__modules__";
+import { lgApi } from "../../__modules__";
 import { addInvalidCreatePost } from "../../utils/users/profile";
+import { Navigate } from "react-router";
 
 class CreatePost extends React.Component {
   constructor() {
@@ -31,7 +32,7 @@ class CreatePost extends React.Component {
     }
     form_post.append("auth_profile", this.profile_auth);
 
-    lg_api("posts/", {
+    lgApi("posts/", {
       method: "post",
       headers: {
         "Content-Type": "multipart/form-data",

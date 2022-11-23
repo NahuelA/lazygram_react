@@ -1,5 +1,6 @@
 import "../../css/Main.css";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 import { lgApi } from "../../__modules__";
 
 import {
@@ -15,6 +16,8 @@ import { Link } from "react-router-dom";
 
 function HeadMenu() {
   const [profiles, setProfiles] = useState([]);
+  const { retrieveAccessToken, accessToken } = useContext(AuthContext);
+
   return (
     <div className="App">
       <header className="header">
@@ -177,36 +180,26 @@ function HeadMenu() {
                 <li
                   className="nav-item"
                   onClick={async () => {
-                    await caches.open("access_token").then(async (access) => {
-                      await access
-                        .match("/access_token")
-                        .then(async (token) => {
-                          await token.json().then(async (accessToken) => {
-                            // Logout
-                            await lgApi({
-                              url: "http://localhost:8000/accounts/logout/",
-                              method: "post",
-                              headers: {
-                                "Content-Type": "multipart/form-data",
-                                Authorization: "Bearer " + String(accessToken),
-                              },
+                    // Logout
+                    await lgApi({
+                      url: "http://localhost:8000/accounts/logout/",
+                      method: "post",
+                      headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: "Bearer " + String(accessToken),
+                      },
 
-                              withCredentials: true,
-                            })
-                              .then(({ res }) => {
-                                console.log(res);
-                                // Remove authenticated user in local storage
-                                window.localStorage.removeItem("profile_auth");
-                                window.localStorage.removeItem(
-                                  "current_profile"
-                                );
-                              })
-                              .catch(({ err }) => {
-                                console.error(err);
-                              });
-                          });
-                        });
-                    });
+                      withCredentials: true,
+                    })
+                      .then(({ res }) => {
+                        console.log(res);
+                        // Remove authenticated user in local storage
+                        window.localStorage.removeItem("profile_auth");
+                        window.localStorage.removeItem("current_profile");
+                      })
+                      .catch(({ err }) => {
+                        console.error(err);
+                      });
 
                     // Delete tokens in cache
                     await caches.delete("refresh_token");

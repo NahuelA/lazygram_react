@@ -28,20 +28,17 @@ const Profile = () => {
     "ml-5 btn btn-sm btn-outline-info"
   );
 
-  // Access token
-  const [accessToken, setAccessToken] = useState("");
-
   // Follow or Unfollow btn
   const [followOrUnfollow, setFollowOrUnfollow] = useState("Follow");
   // Follow or Unfollow htmlClass
   const [followClass, setFollowClass] = useState("ml-5 btn btn-primary");
 
-  // Media path
-  const http_media = "http://localhost:8000/media/";
-
   // Params from url
   const kwargUsername = useParams();
   const profile_auth = window.localStorage.getItem("profile_auth");
+
+  // Context
+  const { retrieveAccessToken, accessToken } = useContext(AuthContext);
 
   // If picture is null, show default profile picture
   const picture =
@@ -56,10 +53,10 @@ const Profile = () => {
     await lgApi(`accounts/isfollowed/${profile_auth}`, {
       method: "get",
       headers: {
-        Authorization: `Token ${caches.has("access_token")}`,
+        Authorization: "Bearer " + String(accessToken),
       },
       params: {
-        profile_followed: kwargUsername,
+        profile_followed: kwargUsername.username,
       },
     })
       .then((res) => {
@@ -79,17 +76,17 @@ const Profile = () => {
    * @param {event} e
    */
   const EditOrFollow = async (e) => {
-    if (kwargUsername !== profile_auth) {
+    if (kwargUsername.username !== profile_auth) {
       isFollowed();
 
       // Follow
       await lgApi(`accounts/followers/${profile_auth}/`, {
         method: "put",
         headers: {
-          Authorization: `Token ${caches.has("access_token")}`,
+          Authorization: "Bearer " + String(accessToken),
         },
         data: {
-          profile: kwargUsername, // Profile that will be followed
+          profile: kwargUsername.username, // Profile that will be followed
           followers: profile_auth, // Authenticated profile will be follow the profile
         },
       })
@@ -104,11 +101,11 @@ const Profile = () => {
       lgApi(`accounts/followings/${profile_auth}/`, {
         method: "put",
         headers: {
-          Authorization: `Token ${caches.has("access_token")}`,
+          Authorization: "Bearer " + String(accessToken),
         },
         data: {
           profile: profile_auth,
-          following: kwargUsername,
+          following: kwargUsername.username,
         },
       })
         .then((res) => {
@@ -121,44 +118,17 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    // Get token in cache
-    const getAccessToken = async () => {
-      await caches.open("access_token").then((cache) => {
-        cache
-          .match("/access_token")
-          .then((accessToken) => {
-            accessToken.json().then((token) => {
-              setAccessToken(token);
-            });
-          })
-          .catch((err) => {
-            console.error(err.response.data);
-          });
-      });
-    };
-    getAccessToken();
-
-    return () => {
-      cancelToken.cancel();
-    };
-  }, []);
-
-  useEffect(() => {
     // Get own profile
     lgApi(`accounts/profiles/${kwargUsername.username}`, {
       headers: {
         Authorization: "Bearer " + String(accessToken),
       },
-    })
-      .then((res) => {
-        setProfile([res.data.results[0]]);
-      })
-      .catch((err) => {
-        console.error("Profile", err.response.data);
-      });
+    }).then((res) => {
+      setProfile([res.data.results[0]]);
+    });
 
     return () => {
-      cancelToken.cancel("Canceled request");
+      cancelToken.cancel();
     };
   }, [accessToken, kwargUsername.username]);
 
@@ -168,29 +138,21 @@ const Profile = () => {
       headers: {
         Authorization: "Bearer " + String(accessToken),
       },
-    })
-      .then((res) => {
-        setFollowers([res.data]);
-      })
-      .catch((err) => {
-        console.error("Followers", err.response);
-      });
+    }).then((res) => {
+      setFollowers([res.data]);
+    });
 
     // Get following
     lgApi(`accounts/followings/${kwargUsername.username}`, {
       headers: {
         Authorization: "Bearer " + String(accessToken),
       },
-    })
-      .then((res) => {
-        setFollowings([res.data]);
-      })
-      .catch((err) => {
-        console.error("Followings", err.response);
-      });
+    }).then((res) => {
+      setFollowings([res.data]);
+    });
 
     return () => {
-      cancelToken.cancel("Canceled request");
+      cancelToken.cancel();
     };
   }, [accessToken, kwargUsername.username]);
 
@@ -212,7 +174,7 @@ const Profile = () => {
       });
 
     return () => {
-      cancelToken.cancel("Canceled request");
+      cancelToken.cancel();
     };
   }, [accessToken, kwargUsername.username]);
 

@@ -1,6 +1,6 @@
 /* List posts from lazygram with react */
 
-import { lg_api } from "../../__modules__";
+import { lgApi } from "../../__modules__";
 import "../../css/posts/ListPosts.css";
 import React from "react";
 import {
@@ -33,7 +33,7 @@ class ListPosts extends React.Component {
   commentComponent(e) {
     let len = e.target.id.split("").length;
     let id = e.target.id.slice(11, len);
-    lg_api(`comments/`, {
+    lgApi(`comments/`, {
       headers: {
         Authorization: `Token ${this.token}`,
       },
@@ -97,7 +97,7 @@ class ListPosts extends React.Component {
 
   componentDidMount() {
     // Getting posts.
-    lg_api("posts/", {
+    lgApi("posts/", {
       headers: {
         Authorization: `Token ${this.token}`,
       },
