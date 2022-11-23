@@ -1,4 +1,4 @@
-import { lg_api } from "../../__modules__";
+import { lgApi } from "../../__modules__";
 
 /**
  * Like a post.
@@ -12,7 +12,7 @@ async function likePost(e) {
       `#id_show_likes_${e.nativeEvent.path[4].id}`
     );
 
-    await lg_api(url, {
+    await lgApi(url, {
       method: "put",
       headers: {
         Authorization: `Token ${token}`,
@@ -49,7 +49,7 @@ async function commentPost(e, newComment) {
     }
 
     // Put comments.
-    lg_api("comments/", {
+    lgApi("comments/", {
       method: "post",
       headers: {
         Authorization: `Token ${token}`,
@@ -131,7 +131,7 @@ async function replyComment(e) {
       }
 
       // Put comments.
-      lg_api(`replies/`, {
+      lgApi(`replies/`, {
         method: "put",
         headers: {
           Authorization: `Token ${token}`,
