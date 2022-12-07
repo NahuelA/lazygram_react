@@ -2,18 +2,16 @@
 
 import { lgApi } from "../../__modules__";
 import "../../css/users/Login.css";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { addCache } from "../../utils/users/cache";
 import { Link } from "react-router-dom";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
-import axios from "axios";
 
 const Login = () => {
   const [errors, setErrors] = useState([]);
   const img = "http://localhost:8000/media/logo_instagram.png";
-  const { retrieveAccessToken, accessToken } = useContext(AuthContext);
-  const cancelToken = axios.CancelToken.source();
+  const { retrieveAccessToken, accessToken, setAccessToken } = useContext(AuthContext);
 
   const loginSubmit = async (e) => {
     e.preventDefault();
@@ -45,6 +43,7 @@ const Login = () => {
         );
 
         window.localStorage.setItem("profile_auth", data.username);
+        setAccessToken(data.access)
       })
       .catch((err) => {
         setErrors([err.response.data]);
@@ -53,17 +52,9 @@ const Login = () => {
       });
   };
 
-  useEffect(() => {
-    retrieveAccessToken();
-
-    return () => {
-      cancelToken.cancel();
-    };
-  }, []);
-
-  return accessToken !== undefined ? (
+  return accessToken ? 
     <Navigate to={"/"} />
-  ) : (
+  : (
     <main>
       <section className="login">
         <div className="logo">
@@ -119,7 +110,7 @@ const Login = () => {
               }
 
               {/* Login submit */}
-              <div className="d-grid gap-2 col-12 my-2">
+              <div className="d-grid gap-2 my-2">
                 <button type="submit" className="btn btn-primary btn-lg">
                   Login
                 </button>

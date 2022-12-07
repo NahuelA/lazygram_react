@@ -38,7 +38,7 @@ const Profile = () => {
   const profile_auth = window.localStorage.getItem("profile_auth");
 
   // Context
-  const { retrieveAccessToken, accessToken } = useContext(AuthContext);
+  const { accessToken } = useContext(AuthContext);
 
   // If picture is null, show default profile picture
   const picture =
