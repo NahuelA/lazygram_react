@@ -1,12 +1,12 @@
 // Import components
-import { HeadMenu } from "./apps/base/HeadMenu";
-import { ListPosts } from "./apps/posts/ListPosts";
-import { Login } from "./apps/users/Login";
-import { EditProfile } from "./apps/users/EditProfile";
-import { Profile } from "./apps/users/Profile";
-import { CreateUser } from "./apps/users/CreateUser";
-import { VerifyToken } from "./apps/users/VerifyToken";
-import { CreatePost } from "./apps/posts/CreatePost";
+import { HeadMenu } from "./components/base/HeadMenu";
+import { ListPosts } from "./components/posts/ListPosts";
+import { Login } from "./components/users/Login";
+import { EditProfile } from "./components/users/EditProfile";
+import { Profile } from "./components/users/Profile";
+import { CreateUser } from "./components/users/CreateUser";
+import { CreatePost } from "./components/posts/CreatePost";
+import { PrivateRoute } from "./components/base/PrivateRoute";
 
 // Import utils
 import {
@@ -23,7 +23,7 @@ import axios from "axios";
  * - baseURL: http://localhost:8000/,
  * - headers: "Content-Type": "application/json; charset=utf-8",
  */
-const lg_api = axios.create({
+const lgApi = axios.create({
   baseURL: "http://localhost:8000/",
   headers: {
     "Content-Type": "application/json; charset=utf-8",
@@ -31,7 +31,7 @@ const lg_api = axios.create({
 });
 
 // Export Axios instance
-export { lg_api };
+export { lgApi };
 
 // Export components
 export {
@@ -44,10 +44,10 @@ export {
   Profile,
   EditProfile,
   CreateUser,
-  VerifyToken,
-
   // Post app
   CreatePost,
+  // Private route
+  PrivateRoute,
 };
 
 // Export utils
