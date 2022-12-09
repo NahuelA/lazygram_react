@@ -1,13 +1,14 @@
+import { useContext } from "react";
+import AuthContext from "../../context/AuthContext";
 import { lgApi } from "../../__modules__";
 
 /**
  * Like a post.
  * @param {*} e
  */
-async function likePost(e) {
+async function likePost(e, accessToken) {
   if (String(e.nativeEvent.path[1].id).startsWith("id_like_post")) {
     let url = `posts/${e.nativeEvent.path[4].id}/`;
-    let token = window.localStorage.getItem("token");
     let likesComponent = document.querySelector(
       `#id_show_likes_${e.nativeEvent.path[4].id}`
     );
@@ -15,12 +16,11 @@ async function likePost(e) {
     await lgApi(url, {
       method: "put",
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: "Bearer " + String(accessToken),
       },
     })
       .then((res) => {
         likesComponent.innerHTML = `${res.data.likes} Likes`;
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -32,11 +32,10 @@ async function likePost(e) {
  * Send comments.
  * @param {*} e
  */
-async function commentPost(e, newComment) {
+async function commentPost(e, newComment, accessToken) {
   try {
     let form_comment = new FormData();
     let postid = e.path[2].id;
-    let token = window.localStorage.getItem("token");
 
     // Post ID validation.
     if (postid !== null) {
@@ -52,7 +51,7 @@ async function commentPost(e, newComment) {
     lgApi("comments/", {
       method: "post",
       headers: {
-        Authorization: `Token ${token}`,
+        Authorization: "Bearer " + String(accessToken),
       },
       data: form_comment,
     })
@@ -73,7 +72,7 @@ async function commentPost(e, newComment) {
  * @param {*} id_comment
  * @returns
  */
-function inputComment(id_comment) {
+function inputComment(id_comment, accessToken) {
   let commentComponent = document.createElement("div");
   let inputComponent = document.createElement("input");
   let btnComponent = document.createElement("button");
@@ -94,7 +93,7 @@ function inputComment(id_comment) {
   commentComponent.append(inputComponent, btnComponent);
   btnComponent.addEventListener("click", (e) => {
     let inputCommentValue = document.querySelector(`#${id_comment}_inp`).value;
-    commentPost(e, inputCommentValue);
+    commentPost(e, inputCommentValue, accessToken);
   });
 
   return commentComponent;
@@ -104,10 +103,9 @@ function inputComment(id_comment) {
  * Reply comments.
  * @param {*} e
  */
-async function replyComment(e) {
+async function replyComment(e, accessToken) {
   if (String(e.nativeEvent.path[1].id).startsWith("comments_post")) {
     try {
-      let token = window.localStorage.getItem("token");
       let replied_by = window.localStorage.getItem("profile_auth");
       let form_comment = new FormData();
       let len = e.target.parentElement.id.split("").length;
@@ -134,7 +132,7 @@ async function replyComment(e) {
       lgApi(`replies/`, {
         method: "put",
         headers: {
-          Authorization: `Token ${token}`,
+          Authorization: "Bearer " + String(accessToken),
         },
         data: form_comment,
       })
@@ -151,14 +149,8 @@ async function replyComment(e) {
   }
 }
 
-async function likeComment(e) {
-  // if (likes !== null) {
-  //   form_comment.append("likes", likes);
-  // }
-}
-
 // Components
 export { inputComment };
 
 // Utils
-export { likePost, commentPost, replyComment, likeComment };
+export { likePost, commentPost, replyComment };
