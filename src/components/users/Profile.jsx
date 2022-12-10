@@ -3,7 +3,7 @@
 import { lgApi } from "../../__modules__";
 import "../../css/users/Profile.css";
 import { useParams } from "react-router";
-import { React, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
@@ -118,6 +118,9 @@ const Profile = () => {
   };
 
   useEffect(() => {
+    // For cancel load request
+    const cancelToken = axios.CancelToken.source();
+
     // Get own profile
     lgApi(`accounts/profiles/${kwargUsername.username}`, {
       headers: {
@@ -133,6 +136,9 @@ const Profile = () => {
   }, [accessToken, kwargUsername.username]);
 
   useEffect(() => {
+    // For cancel load request
+    const cancelToken = axios.CancelToken.source();
+
     // Get followers
     lgApi(`accounts/followers/${kwargUsername.username}`, {
       headers: {
@@ -157,20 +163,19 @@ const Profile = () => {
   }, [accessToken, kwargUsername.username]);
 
   useEffect(() => {
-    // Own posts
-    lgApi("posts/", {
+    // For cancel load request
+    const cancelToken = axios.CancelToken.source();
+
+    lgApi(`profile-posts/${kwargUsername.username}`, {
       headers: {
         Authorization: "Bearer " + String(accessToken),
       },
-      params: {
-        own_post: kwargUsername.username,
-      },
     })
       .then((res) => {
-        setPosts([res.data.results]);
+        setPosts(res.data)
       })
       .catch((err) => {
-        console.error(err.response.data);
+        console.error(err);
       });
 
     return () => {
@@ -227,10 +232,10 @@ const Profile = () => {
       </div>
       <hr />
       <div className="own-posts">
-        {posts[0]?.map((value) => {
+        {posts?.map((value) => {
           return (
             <div className="m-2 rounded own-posts-posts" key={value?.id}>
-              <Link to={`profile/${kwargUsername.username}/post/${value?.id}`}>
+              <Link to={`post/${value?.id}`}>
                 <div className="img-posts-container">
                   <img
                     src={value?.picture}

@@ -17,7 +17,6 @@ class RefreshToken extends React.Component {
     e.preventDefault();
     let refreshForm = new FormData();
     let refresh = caches.open("refresh_token").then((cache) => {
-      console.log(cache);
     });
     refreshForm.append("token", refresh);
 
@@ -26,7 +25,6 @@ class RefreshToken extends React.Component {
       data: refresh,
     })
       .then((res) => {
-        console.log(res.data);
         window.location.hash = "#login";
       })
       .catch((err) => {

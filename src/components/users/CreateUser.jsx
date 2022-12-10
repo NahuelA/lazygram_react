@@ -20,13 +20,11 @@ const CreateUser = () => {
 
     // Username validation
     if (username !== undefined) {
-      console.log(username);
       form_user.append("username", username);
     }
 
     // Password validation
     if (password !== undefined) {
-      console.log(password);
       form_user.append("password", password);
     }
 
@@ -54,7 +52,6 @@ const CreateUser = () => {
       data: form_user,
     })
       .then((res) => {
-        console.log(res);
         window.localStorage.setItem("profile_auth", username);
       })
       .catch((err) => {

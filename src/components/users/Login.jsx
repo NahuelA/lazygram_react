@@ -30,7 +30,6 @@ const Login = () => {
     })
       .then(({ data }) => {
         // Set in localStorage the username from authenticated user.
-        console.log(data);
         addCache(
           "access_token",
           "http://localhost:3000/access_token",
