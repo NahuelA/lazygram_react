@@ -15,9 +15,17 @@ import {
 import { Link } from "react-router-dom";
 
 function HeadMenu() {
+  // Set all profiles that do match.
   const [profiles, setProfiles] = useState([]);
-  const { retrieveAccessToken, accessToken, setAccessToken } =
-    useContext(AuthContext);
+
+  // If does not match any profile, update this state, else return empty string.
+  const [notProfile, setNotProfile] = useState("");
+  const { accessToken, setAccessToken } = useContext(AuthContext);
+  const httpMedia = "http://localhost:8000/media/";
+  let profilePicture; // Profile with a null profile picture: set an empty profile picture by default.
+  let profileDoesNotMatch = (
+    <p className="border border-2 p-2 fs-6 text-secondary">{notProfile}</p>
+  );
 
   return (
     <div className="App">
@@ -35,15 +43,7 @@ function HeadMenu() {
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                 {/* Search */}
                 <li className="nav-item">
-                  <span
-                    className="nav-link container-icons-link"
-                    onClick={(e) => {
-                      let grapSearchProfiles = document.querySelector(
-                        "#grapper-search-profiles"
-                      );
-                      grapSearchProfiles.classList.toggle("hidden");
-                    }}
-                  >
+                  <span className="nav-link container-icons-link">
                     <BsSearch className="icon-gral" />
                   </span>
                 </li>
@@ -56,84 +56,88 @@ function HeadMenu() {
                       id="search-input"
                       placeholder="Search profile"
                       autoComplete="off"
-                      onChange={(e) => {
-                        lgApi(`accounts/profile/${e.target.value}`, {
+                      onChange={async (e) => {
+                        await lgApi(`accounts/profiles/${e.target.value}`, {
                           headers: {
-                            Authorization: `Token ${window.localStorage.getItem(
-                              "token"
-                            )}`,
+                            Authorization: "Bearer " + String(accessToken),
                           },
                         })
                           .then((res) => {
-                            setProfiles(res.data.results || res.data);
+                            if (e.target.value.length !== 0) {
+                              setProfiles(res.data.results || res.data);
+                              if (res.data.results?.length === 0) {
+                                setNotProfile("Profile does not match");
+                              }
+                            } else {
+                              setProfiles([]);
+                              setNotProfile("");
+                            }
                           })
-                          .then((err) => {
-                            console.log(err.response);
-                          });
+                          .then((err) => {});
+                      }}
+                      onBlur={() => {
+                        setNotProfile("");
                       }}
                     />
-                    <div
-                      className="grapper-results-search"
-                      id="grapper-search-profiles"
-                    >
-                      {profiles !== "Does not results." ? (
-                        profiles?.map((value) => {
-                          return (
-                            <div key={value?.id}>
-                              <div className="grapper-searchs border border-2 p-2 rounded-3">
-                                <div>
-                                  <img
-                                    src={value?.picture}
-                                    alt={value?.user?.username}
-                                    className="go-to-profile rounded-circle profile-img-search"
-                                    onClick={(e) => {
-                                      window.localStorage.setItem(
-                                        "profile",
-                                        e.target.alt
-                                      );
-                                      let hashProfile = "#profile";
-                                      if (
-                                        hashProfile === window.location.hash
-                                      ) {
-                                        window.location.reload();
-                                      } else {
-                                        window.location.hash = "#profile";
-                                      }
-                                    }}
-                                    id={`id_picture_search_${value?.id}`}
-                                  />
-                                </div>
-                                <div>
-                                  <span
-                                    className="h5 go-to-profile"
-                                    id={`id_username_search_${value?.id}`}
-                                    onClick={(e) => {
-                                      window.localStorage.setItem(
-                                        "profile",
-                                        e.target.innerText
-                                      );
-                                      let hashProfile = "#profile";
-                                      if (
-                                        hashProfile === window.location.hash
-                                      ) {
-                                        window.location.reload();
-                                      } else {
-                                        window.location.hash = "#profile";
-                                      }
-                                    }}
-                                  >
-                                    {value?.user?.username}
-                                  </span>
+                    <div className="grapper-results-search">
+                      {profiles?.length !== 0
+                        ? profiles?.map((value, i) => {
+                            // If post image not contains http_media, add.
+                            if (value?.picture === null) {
+                              profilePicture = httpMedia + "user_circle.svg";
+                            } else {
+                              profilePicture = value?.picture;
+                            }
+                            return (
+                              <div key={i}>
+                                <div className="grapper-searchs border border-2 p-2 rounded-3">
+                                  <div>
+                                    <Link
+                                      to={`profile/${value?.user?.username}`}
+                                    >
+                                      <img
+                                        src={profilePicture}
+                                        alt={value?.user?.username}
+                                        className={
+                                          value?.picture === null
+                                            ? "go-to-profile rounded-circle profile-img-search"
+                                            : "go-to-profile rounded-circle profile-img-search scale-down"
+                                        }
+                                        onClick={(e) => {
+                                          window.localStorage.setItem(
+                                            "profile",
+                                            e.target.alt
+                                          );
+                                        }}
+                                        id={`id_picture_search_${value?.id}`}
+                                      />
+                                    </Link>
+                                  </div>
+                                  <div>
+                                    <Link
+                                      to={`profile/${value?.user?.username}`}
+                                    >
+                                      <span
+                                        className="h5 go-to-profile"
+                                        id={`id_username_search_${value?.id}`}
+                                        onClick={(e) => {
+                                          window.localStorage.setItem(
+                                            "profile",
+                                            e.target.innerText
+                                          );
+                                        }}
+                                      >
+                                        {value?.user?.username}
+                                      </span>
+                                    </Link>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          );
-                        })
-                      ) : (
-                        <p className="border border-2 p-2 fs-6 text-secondary">
-                          {profiles}
-                        </p>
-                      )}
+                            );
+                          })
+                        : notProfile !== ""
+                        ? profileDoesNotMatch
+                        : ""}
                     </div>
                   </div>
                 </li>
@@ -189,16 +193,13 @@ function HeadMenu() {
                         "Content-Type": "multipart/form-data",
                         Authorization: "Bearer " + String(accessToken),
                       },
-
                       withCredentials: true,
                     })
-                      .then(({ res }) => {
-                        console.log(res);
+                      .then(() => {
                         // Remove authenticated user in local storage
                         window.localStorage.removeItem("profile_auth");
                         window.localStorage.removeItem("current_profile");
                         setAccessToken(false);
-                        console.log(accessToken);
                       })
                       .catch(({ err }) => {
                         console.error(err);
