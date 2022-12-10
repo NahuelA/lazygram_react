@@ -13,6 +13,7 @@ import {
   CreatePost,
   PrivateRoute,
 } from "../../__modules__";
+import { PostDetail } from "../posts/PostDetail";
 
 const App = () => {
   const { accessToken } = useContext(AuthContext);
@@ -37,6 +38,7 @@ const App = () => {
             {/* Nested edit profile */}
             <Route path="edit" element={<EditProfile />} />
           </Route>
+          <Route path="/profile/:username/post/:id" element={<PostDetail />} />
 
           {/* New post */}
           <Route path="/new-post" element={<CreatePost />} />
