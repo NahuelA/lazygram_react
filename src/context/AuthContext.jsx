@@ -1,8 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import { lgApi } from "../__modules__";
 import { addCache } from "../utils/users/cache";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
-
 import axios from "axios";
 
 const AuthContext = createContext();
