@@ -1,5 +1,3 @@
-import { useContext } from "react";
-import AuthContext from "../../context/AuthContext";
 import { lgApi } from "../../__modules__";
 
 /**
@@ -23,7 +21,7 @@ async function likePost(e, accessToken) {
         likesComponent.innerHTML = `${res.data.likes} Likes`;
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   }
 }
@@ -56,14 +54,12 @@ async function commentPost(e, newComment, accessToken) {
       data: form_comment,
     })
       .then((res) => {
-        console.log(res.data);
       })
       .catch((err) => {
-        console.log(err.response.data);
+        console.error(err.response.data);
       });
   } catch (err) {
     alert(err.name, err.message);
-    console.log(err.message);
   }
 }
 
@@ -137,14 +133,12 @@ async function replyComment(e, accessToken) {
         data: form_comment,
       })
         .then((res) => {
-          console.log(res.data);
         })
         .catch((err) => {
-          console.log(err.response.data);
+          console.error(err.response.data);
         });
     } catch (err) {
       alert(err.name, err.message);
-      console.log(err.message);
     }
   }
 }
