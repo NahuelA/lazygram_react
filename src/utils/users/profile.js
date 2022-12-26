@@ -91,7 +91,6 @@ function addInvalidRegister(err, targets) {
 function addInvalidToken(target, error_log) {
   let error_label = document.createElement("div");
   error_label.className = "invalid-feedback";
-  console.log(error_log);
   error_label.innerHTML = `${error_log.token}`;
 
   target.classList.add("is-invalid");
@@ -120,25 +119,22 @@ function addInvalidCreatePost(err, target) {
   });
 }
 
-function searchProfile(value) {
-  let token = window.localStorage.getItem("token");
-  console.log(value);
+function searchProfile(value, accessToken) {
   lgApi("accounts/profile/", {
     headers: {
-      Authorization: `Token ${token}`,
+      Authorization: "Bearer " + String(accessToken),
     },
     params: {
       search_profile: `${value}`,
     },
   })
     .then((res) => {
-      console.log(res.data);
       res.data.results.map((v) => {
         <showSearchProfiles picture={v.picture} username={v.user.username} />;
       });
     })
     .catch((err) => {
-      console.log(err.response);
+      console.error(err.response);
     });
 }
 
