@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 
 /* Post detail */
@@ -19,11 +19,8 @@ import { likePost, inputComment } from "../../utils/posts/posts";
 const PostDetail = () => {
   const { accessToken } = useContext(AuthContext);
   const [comments, setComments] = useState([]);
-  const navigation = useNavigate();
   const idPost = useParams();
   const [post, setPost] = useState([]);
-
-  const [created, setCreated] = useState("");
   const httpMedia = "http://localhost:8000/media/";
 
   let picture;
@@ -76,6 +73,9 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
+    // For cancel load request
+    const cancelToken = axios.CancelToken.source();
+
     lgApi(`posts/${idPost.id}`, {
       headers: {
         Authorization: "Bearer " + String(accessToken),
@@ -87,6 +87,10 @@ const PostDetail = () => {
       .catch((err) => {
         console.error(err.response.data);
       });
+
+    return () => {
+      cancelToken.cancel();
+    };
   }, [accessToken, idPost.id]);
 
   // If post image not contains http_media, add.
@@ -178,6 +182,25 @@ const PostDetail = () => {
             <BsFillBookmarkFill
               className="icon-size-post"
               id={`id_save_post_${post?.id}`}
+              onClick={async (e) => {
+                let id = e.target.parentNode.id.split("_");
+                await lgApi(
+                  `saved_posts/${window.localStorage.getItem("profile_auth")}/`,
+                  {
+                    method: "put",
+                    headers: {
+                      Authorization: "Bearer " + String(accessToken),
+                    },
+                    data: {
+                      saved_post: id[3],
+                    },
+                  }
+                )
+                  .then((res) => {})
+                  .catch((err) => {
+                    console.error(err.response);
+                  });
+              }}
             />
           </div>
 
