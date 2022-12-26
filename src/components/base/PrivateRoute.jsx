@@ -7,7 +7,6 @@ const PrivateRoute = () => {
 
   useEffect(() => {
     retrieveAccessToken();
-    console.log("Effect", accessToken);
   }, [accessToken]);
 
   return accessToken ? <Outlet /> : <Navigate to={"/login"} />;
