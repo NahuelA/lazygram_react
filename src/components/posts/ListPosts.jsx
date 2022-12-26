@@ -2,7 +2,7 @@
 
 import { lgApi } from "../../__modules__";
 import "../../css/posts/ListPosts.css";
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   BsFillHeartFill,
   BsFillChatFill,
@@ -12,22 +12,18 @@ import {
 
 import { likePost, inputComment } from "../../utils/posts/posts";
 import AuthContext from "../../context/AuthContext";
-import { Navigate, useLocation, useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import axios from "axios";
 
 const ListPosts = () => {
-  const { accessToken, newPost } = useContext(AuthContext);
+  const { accessToken } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const navigation = useNavigate();
-
-  const [postImg, setPostImg] = useState("");
-  const [created, setCreated] = useState("");
   const httpMedia = "http://localhost:8000/media/";
+
   let picture;
   let profilePictureNull;
-
-  // For cancel load request
 
   const handledPosts = (e) => {
     likePost(e, accessToken);
@@ -209,6 +205,27 @@ const ListPosts = () => {
                 <BsFillBookmarkFill
                   className="icon-size-post"
                   id={`id_save_post_${post.id}`}
+                  onClick={async (e) => {
+                    let id = e.target.parentNode.id.split("_");
+                    await lgApi(
+                      `saved_posts/${window.localStorage.getItem(
+                        "profile_auth"
+                      )}/`,
+                      {
+                        method: "put",
+                        headers: {
+                          Authorization: "Bearer " + String(accessToken),
+                        },
+                        data: {
+                          saved_post: id[3],
+                        },
+                      }
+                    )
+                      .then((res) => {})
+                      .catch((err) => {
+                        console.error(err.response);
+                      });
+                  }}
                 />
               </div>
 
