@@ -56,25 +56,26 @@
 
 /* Search users */
 
-.grid-search{
+.grid-search {
   display: grid;
   align-items: center;
 }
 
-.go-to-profile:hover{
-
+.go-to-profile:hover {
   cursor: pointer;
   opacity: 0.8;
 }
 
-.profile-img-search{
-
-  width:70px;
+.profile-img-search {
+  width: 70px;
   height: 70px;
+}
+
+.scale-down {
   object-fit: scale-down;
 }
 
-.grapper-searchs{
+.grapper-searchs {
   display: grid;
   grid-template-columns: 50% 40%;
 
@@ -84,8 +85,7 @@
   justify-content: center;
 }
 
-.grapper-results-search{
-
+.grapper-results-search {
   position: absolute;
   top: 3rem;
   z-index: 1;
@@ -94,7 +94,6 @@
   background-color: #fff;
 }
 
-.hidden{
-
+.hidden {
   display: none;
 }

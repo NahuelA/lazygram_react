@@ -1,50 +1,58 @@
-
-
-.main{
-
-    margin-top: 5em;
+.main {
+  margin-top: 5em;
 }
 
-.container-profile{
-
-    margin-top: 1em;
+.container-profile {
+  margin-top: 1em;
 }
 
-.picture-profile{
-
-    object-fit: cover;
+.picture-profile {
+  object-fit: cover;
 }
 
-.username-h2{
-
-    font-weight: 100;
+.username-h2 {
+  font-weight: 100;
 }
 
-.info-profile{
-    font-size: 1.2em
+.info-profile {
+  font-size: 1.2em;
 }
 
-.own-posts{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    width: 95%;
-    justify-items: center;
-    margin: auto;
+.own-posts {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width: 95%;
+  justify-items: center;
+  margin: auto;
 }
 
-.own-posts-posts{
-    max-width: 21rem;
+.own-posts-posts {
+  max-width: 21rem;
 }
 
-.img-posts-container{
-
-    width: 21rem;
-    height: 21rem;
+.img-posts-container {
+  width: 21rem;
+  height: 21rem;
 }
 
-.img-own-post{
+.img-own-post {
+  width: 21rem;
+  height: 21rem;
+  object-fit: cover;
+}
 
-    width: 21rem;
-    height: 21rem;
-    object-fit: cover;
+.show-posts {
+  display: grid;
+  grid-template-columns: 5% 5%;
+  margin: auto;
+  justify-content: center;
+}
+
+.icons-posts {
+  font-size: 2.5em;
+}
+
+.icons-posts:hover {
+  cursor: pointer;
+  opacity: 0.9;
 }
