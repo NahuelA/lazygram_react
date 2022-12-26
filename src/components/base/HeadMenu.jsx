@@ -11,6 +11,7 @@ import {
   BsInstagram,
   BsSearch,
   BsPlusCircle,
+  BsFillWalletFill,
 } from "react-icons/bs";
 import { Link } from "react-router-dom";
 
@@ -179,6 +180,13 @@ function HeadMenu() {
                       <BsPlusCircle className="icon-gral" />
                     </span>
                   </Link>
+                </li>
+
+                {/* Lazy wallet */}
+                <li className="nav-item">
+                  <span className="nav-link container-icons-link">
+                    <BsFillWalletFill className="icon-gral" />
+                  </span>
                 </li>
 
                 {/* Logout */}
