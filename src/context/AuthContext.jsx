@@ -28,7 +28,6 @@ const AuthProvider = ({ children }) => {
   const [followOrUnfollow, setFollowOrUnfollow] = useState("Follow");
   // Follow or Unfollow htmlClass
   const [followClass, setFollowClass] = useState("ml-5 btn btn-primary");
-  const cancelToken = axios.CancelToken.source();
 
   /**
    * Retrieve active token that stored in cache storage
@@ -47,7 +46,7 @@ const AuthProvider = ({ children }) => {
           }
         })
         .catch((err) => {
-          console.log("Access token not found", err);
+          console.error("Access token not found", err);
         });
     });
   };
@@ -83,7 +82,6 @@ const AuthProvider = ({ children }) => {
                   );
                   setAccessToken(data.access);
                   setRefreshToken(data.refresh);
-                  console.log("Access token state update", accessToken);
                 })
                 .catch((err) => {
                   console.error("Error to refresh token", err.response.data);
@@ -101,6 +99,7 @@ const AuthProvider = ({ children }) => {
 
   // Refreshing token effect
   useEffect(() => {
+    const cancelToken = axios.CancelToken.source();
     const interval = updateToken();
 
     return () => {
