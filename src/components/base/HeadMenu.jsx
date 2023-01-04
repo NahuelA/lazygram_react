@@ -29,9 +29,9 @@ function HeadMenu() {
   );
 
   return (
-    <div className="App">
-      <header className="header">
-        <nav className="navbar navbar-expand-lg bg-light">
+    <div className="container-header">
+      <header className="header rounded-pill">
+        <nav className="navbar navbar-expand-lg">
           <div className="container-fluid">
             <div className="container-logo-link grid">
               <BsInstagram className="icon-gral" />
@@ -53,16 +53,19 @@ function HeadMenu() {
                 <li className="nav-item">
                   <div className="grid-search position-relative">
                     <input
-                      className="form-control"
+                      className="form-control font"
                       id="search-input"
                       placeholder="Search profile"
                       autoComplete="off"
                       onChange={async (e) => {
-                        await lgApi(`accounts/profiles/${e.target.value}`, {
-                          headers: {
-                            Authorization: "Bearer " + String(accessToken),
-                          },
-                        })
+                        await lgApi(
+                          `accounts/profiles/search/${e.target.value}`,
+                          {
+                            headers: {
+                              Authorization: "Bearer " + String(accessToken),
+                            },
+                          }
+                        )
                           .then((res) => {
                             if (e.target.value.length !== 0) {
                               setProfiles(res.data.results || res.data);
