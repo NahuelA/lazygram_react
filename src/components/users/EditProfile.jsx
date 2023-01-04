@@ -3,14 +3,27 @@
 import { lgApi } from "../../__modules__";
 import { addInvalidUpdate } from "../../__modules__";
 import "../../css/users/Profile.css";
-import { React, useState, useEffect, useContext } from "react";
+import { React, useState, useContext, useEffect } from "react";
 import AuthContext from "../../context/AuthContext";
-import { redirect } from "react-router";
+import { redirect, useNavigate } from "react-router";
+import "../../css/Margin.css";
+import axios from "axios";
 
 const EditProfile = () => {
   const [profile, setProfile] = useState([]);
   const authUser = window.localStorage.getItem("profile_auth") + "/";
-  const { retrieveAccessToken } = useContext(AuthContext);
+  const { accessToken } = useContext(AuthContext);
+  const navigate = useNavigate();
+  let picture = document.querySelector("#id_picture");
+  let biography = document.querySelector("#id_biography");
+  let phoneNumber = document.querySelector("#id_phone_number");
+  let website = document.querySelector("#id_website");
+  let dateOfBirth = document.querySelector("#id_date_of_birth");
+
+  let username = document.querySelector("#id_username");
+  let email = document.querySelector("#id_email");
+  let firstName = document.querySelector("#id_first_name");
+  let lastName = document.querySelector("#id_last_name");
 
   // Submit profile handler
   async function updateProfile(e) {
@@ -18,76 +31,70 @@ const EditProfile = () => {
 
     // Profile update.
     let profileForm = new FormData();
-    let picture = document.querySelector("#id_picture").files[0];
-    let biography = document.querySelector("#id_biography").value;
-    let phoneNumber = document.querySelector("#id_phone_number").value;
-    let website = document.querySelector("#id_website").value;
-    let dateOfBirth = document.querySelector("#id_date_of_birth").value;
-
     // User update.
     let userForm = new FormData();
-    let username = document.querySelector("#id_username").value;
-    let email = document.querySelector("#id_email").value;
-    let firstName = document.querySelector("#id_first_name").value;
-    let lastName = document.querySelector("#id_last_name").value;
 
     // Username validation.
-    if (username !== undefined) {
-      userForm.append("username", username);
+    if (username.value !== undefined) {
+      userForm.append("username", username.value);
     }
 
     // Email validation.
-    if (email !== undefined) {
-      userForm.append("email", email);
+    if (email.value !== undefined) {
+      userForm.append("email", email.value);
     }
 
     // first_name validation.
-    if (firstName !== undefined) {
-      userForm.append("first_name", firstName);
+    if (firstName.value !== undefined) {
+      userForm.append("first_name", firstName.value);
     }
 
     // last_name validation.
-    if (lastName !== undefined) {
-      userForm.append("last_name", lastName);
+    if (lastName.value !== undefined) {
+      userForm.append("last_name", lastName.value);
     }
 
     // Picture validation.
-    if (picture !== undefined) {
-      profileForm.append("picture", picture);
+    if (picture.files[0] !== undefined) {
+      profileForm.append("picture", picture.files[0]);
     }
     // Biography validate.
-    if (biography !== undefined) {
-      profileForm.append("biography", biography);
+    if (biography.value !== undefined) {
+      profileForm.append("biography", biography.value);
     }
 
     // Phone number validation.
-    if (phoneNumber !== undefined) {
-      profileForm.append("phone_number", phoneNumber);
+    if (phoneNumber.value !== undefined) {
+      profileForm.append("phone_number", phoneNumber.value);
     }
 
     // Website validation.
-    if (website !== undefined) {
-      profileForm.append("website", website);
+    if (website.value !== undefined) {
+      profileForm.append("website", website.value);
     }
 
     // Date of birth validation.
-    if (dateOfBirth !== undefined) {
-      profileForm.append("date_of_birth", dateOfBirth);
+    if (dateOfBirth.value !== undefined) {
+      profileForm.append("date_of_birth", dateOfBirth.value);
     }
+
+    let profileUpdate = true;
+    let userUpdate = true;
 
     // Update profile
     await lgApi(`accounts/profiles/${authUser}`, {
       method: "put",
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + String(retrieveAccessToken()),
+        Authorization: "Bearer " + String(accessToken),
       },
       data: profileForm,
     })
       .then(({ data }) => {
-        return redirect(`/profiles/${data?.results[0]?.user?.username}`);
+        console.log(data);
       })
       .catch((err) => {
+        profileUpdate = false;
         addInvalidUpdate(err.response.data, e.target);
       });
 
@@ -96,30 +103,38 @@ const EditProfile = () => {
       method: "put",
       headers: {
         "Content-Type": "multipart/form-data",
-        Authorization: "Bearer " + String(retrieveAccessToken()),
+        Authorization: "Bearer " + String(accessToken),
       },
       data: userForm,
     })
       .then(({ data }) => {
-        window.localStorage.setItem(
-          "profile_auth",
-          data?.results[0].user?.username
-        );
-        return redirect(`/profiles/${data?.results[0]?.user?.username}`);
+        window.localStorage.setItem("profile_auth", data?.username);
       })
       .catch((err) => {
+        userUpdate = false;
         addInvalidUpdate(err.response.data, e.target);
       });
+
+    if (profileUpdate && userUpdate) {
+      navigate("..", { relative: "path" });
+    }
   }
 
-  // Getting data from profile user.
-  lgApi(`accounts/profiles/${authUser}`, {
-    headers: {
-      Authorization: "Bearer " + String(retrieveAccessToken()),
-    },
-  }).then(({ data }) => {
-    setProfile([data.results[0]]);
-  });
+  useEffect(() => {
+    const cancelToken = axios.CancelToken.source();
+
+    // Getting data from profile user.
+    lgApi(`accounts/profiles/${authUser}`, {
+      headers: {
+        Authorization: "Bearer " + String(accessToken),
+      },
+    }).then(({ data }) => {
+      setProfile(data);
+    });
+    return () => {
+      cancelToken.cancel();
+    };
+  }, [accessToken, authUser]);
 
   // Getting date (yyy-mm-dd) from user
   let date = profile?.date_of_birth;
@@ -134,6 +149,7 @@ const EditProfile = () => {
       onSubmit={(e) => {
         updateProfile(e);
       }}
+      className="mt-3"
     >
       <div className="mx-auto w-75">
         {/* Title edit profile */}
@@ -150,8 +166,8 @@ const EditProfile = () => {
             type="text"
             placeholder="Username"
             id="id_username"
-            value={profile?.user?.username}
             className="form-control"
+            defaultValue={profile?.user?.username || ""}
           />
         </div>
 
@@ -169,7 +185,7 @@ const EditProfile = () => {
             id="id_email"
             placeholder="youremail@domain.com"
             aria-label="Your email"
-            value={profile?.user?.email}
+            defaultValue={profile?.user?.email || ""}
           />
         </div>
 
@@ -182,8 +198,8 @@ const EditProfile = () => {
             type="text"
             placeholder="First name"
             id="id_first_name"
-            value={profile?.user?.first_name}
             className="form-control"
+            defaultValue={profile?.user?.first_name || ""}
           />
         </div>
 
@@ -196,8 +212,8 @@ const EditProfile = () => {
             type="text"
             placeholder="Last name"
             id="id_last_name"
-            value={profile?.user?.last_name}
             className="form-control"
+            defaultValue={profile?.user?.last_name || ""}
           />
         </div>
 
@@ -210,8 +226,8 @@ const EditProfile = () => {
             type="text"
             placeholder="Your biography"
             id="id_biography"
-            value={profile?.biography}
             className="form-control"
+            defaultValue={profile?.biography || ""}
           />
         </div>
 
@@ -225,6 +241,7 @@ const EditProfile = () => {
             id="id_picture"
             accept="image/png, image/jpeg image/jpg image/svg"
             className="form-control"
+            defaultValue={profile?.picture || ""}
           />
         </div>
 
@@ -237,7 +254,7 @@ const EditProfile = () => {
             type="date"
             id="id_date_of_birth"
             className="form-control"
-            value={date}
+            defaultValue={profile?.date_of_birth || ""}
           />
         </div>
 
@@ -253,7 +270,7 @@ const EditProfile = () => {
             pattern="https://.*"
             maxLength="200"
             className="form-control"
-            value={profile?.website}
+            defaultValue={profile?.website || ""}
           />
         </div>
 
@@ -269,7 +286,7 @@ const EditProfile = () => {
             maxLength="17"
             min="0"
             className="form-control"
-            value={profile?.phone_number}
+            defaultValue={profile?.phone_number || ""}
           />
         </div>
 
