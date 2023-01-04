@@ -7,11 +7,13 @@ import { addCache } from "../../utils/users/cache";
 import { Link } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import AuthContext from "../../context/AuthContext";
+import "../../css/Margin.css";
 
 const Login = () => {
   const [errors, setErrors] = useState([]);
   const img = "http://localhost:8000/media/logo_instagram.png";
-  const { retrieveAccessToken, accessToken, setAccessToken } = useContext(AuthContext);
+  const { accessToken, setAccessToken } =
+    useContext(AuthContext);
 
   const loginSubmit = async (e) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ const Login = () => {
         );
 
         window.localStorage.setItem("profile_auth", data.username);
-        setAccessToken(data.access)
+        setAccessToken(data.access);
       })
       .catch((err) => {
         setErrors([err.response.data]);
@@ -51,11 +53,11 @@ const Login = () => {
       });
   };
 
-  return accessToken ? 
+  return accessToken ? (
     <Navigate to={"/"} />
-  : (
+  ) : (
     <main>
-      <section className="login">
+      <section className="login mt-3">
         <div className="logo">
           <img src={img} alt="copygram_logo" />
           <h1>Lazygram</h1>
