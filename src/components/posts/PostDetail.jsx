@@ -1,5 +1,6 @@
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
+import "../../css/Margin.css";
 
 /* Post detail */
 
@@ -113,7 +114,7 @@ const PostDetail = () => {
     <>
       <div
         id={post?.id}
-        className="row w-50 mx-auto mt-4  mb-2 p-2 posts border border-4"
+        className="row w-50 mx-auto mb-2 p-2 posts border border-4 mt-3"
         onClick={(e) => handledPosts(e)}
       >
         {/* User profile image */}

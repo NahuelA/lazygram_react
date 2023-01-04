@@ -9,6 +9,7 @@ import {
   BsFillBookmarkFill,
   BsShareFill,
 } from "react-icons/bs";
+import "../../css/Margin.css";
 
 import { likePost, inputComment } from "../../utils/posts/posts";
 import AuthContext from "../../context/AuthContext";
@@ -112,7 +113,7 @@ const ListPosts = () => {
   }, [accessToken]);
 
   return (
-    <section className="">
+    <section className="mt-3">
       {posts?.map((post, i) => {
         // If post image not contains http_media, add.
         if (!String(post.picture).startsWith(httpMedia)) {
