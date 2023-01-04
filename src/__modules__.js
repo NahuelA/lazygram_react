@@ -7,6 +7,7 @@ import { Profile } from "./components/users/Profile";
 import { CreateUser } from "./components/users/CreateUser";
 import { CreatePost } from "./components/posts/CreatePost";
 import { PrivateRoute } from "./components/base/PrivateRoute";
+import { ActivateAccount } from "./components/users/ActivateAccount";
 
 // Import utils
 import {
@@ -44,6 +45,7 @@ export {
   Profile,
   EditProfile,
   CreateUser,
+  ActivateAccount,
   // Post app
   CreatePost,
   // Private route
