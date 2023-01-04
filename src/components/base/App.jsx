@@ -10,6 +10,7 @@ import {
   Login,
   EditProfile,
   CreateUser,
+  ActivateAccount,
   CreatePost,
   PrivateRoute,
 } from "../../__modules__";
@@ -27,6 +28,9 @@ const App = () => {
         {/* Register */}
         <Route path="/register" element={<CreateUser />} />
 
+        {/* Active account */}
+        <Route path="/activate-account" element={<ActivateAccount />} />
+
         {/* Login */}
         <Route path="/login" element={<Login />} />
 
@@ -34,10 +38,8 @@ const App = () => {
           {/* Header */}
 
           {/* Profile */}
-          <Route path="/profile/:username" element={<Profile />}>
-            {/* Nested edit profile */}
-            <Route path="edit" element={<EditProfile />} />
-          </Route>
+          <Route path="/profile/:username" element={<Profile />} />
+          <Route path="/profile/:username/edit" element={<EditProfile />} />
           <Route path="/profile/:username/post/:id" element={<PostDetail />} />
 
           {/* New post */}
