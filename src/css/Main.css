@@ -14,14 +14,24 @@
 
 /* Header styles */
 
-.header {
+.container-header {
   position: relative;
+}
+
+.header {
+  position: fixed;
+  width: 95%;
+
+  background-color: #81a7cc;
+  z-index: 1;
+  top: 0;
+  left: 33px;
 }
 
 /* Icons */
 
 .icon-gral {
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: var(--color-one);
 }
 
@@ -50,7 +60,7 @@
 }
 
 .fs-title {
-  font-size: 35px;
+  font-size: 2em;
   color: var(--color-one);
 }
 
@@ -83,6 +93,11 @@
   align-items: center;
   justify-items: center;
   justify-content: center;
+}
+
+.font{
+
+  font-size: 15px !important;
 }
 
 .grapper-results-search {
