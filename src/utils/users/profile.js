@@ -26,7 +26,24 @@ function searchInputs(inputs, key_err, error_log) {
  * @param {*} targets
  */
 function addInvalidUpdate(err, targets) {
+  console.log(err);
   Array(err).map((value) => {
+    if (value.username !== undefined) {
+      searchInputs(targets, "username", value.username);
+    }
+
+    if (value.email !== undefined) {
+      searchInputs(targets, "email", value.email);
+    }
+
+    if (value.first_name !== undefined) {
+      searchInputs(targets, "first_name", value.first_name);
+    }
+
+    if (value.last_name !== undefined) {
+      searchInputs(targets, "last_name", value.last_name);
+    }
+
     if (value.website !== undefined) {
       searchInputs(targets, "website", value.website);
     }
@@ -90,8 +107,12 @@ function addInvalidRegister(err, targets) {
 
 function addInvalidToken(target, error_log) {
   let error_label = document.createElement("div");
-  error_label.className = "invalid-feedback";
-  error_label.innerHTML = `${error_log.token}`;
+  if (target.nextSibling.id === "submit") {
+    error_label.className = "invalid-feedback";
+    error_label.innerHTML = `${error_log}`;
+  } else {
+    error_label.innerHTML = "";
+  }
 
   target.classList.add("is-invalid");
   target.parentNode.insertBefore(error_label, target.nextSibling);
