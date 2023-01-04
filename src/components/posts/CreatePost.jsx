@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { lgApi } from "../../__modules__";
 import { addInvalidCreatePost } from "../../utils/users/profile";
 import AuthContext from "../../context/AuthContext";
+import "../../css/Margin.css";
 
 const CreatePost = () => {
   const { accessToken } = useContext(AuthContext);
@@ -42,7 +43,7 @@ const CreatePost = () => {
   };
 
   return (
-    <section className="mt-5">
+    <section className="mt-3">
       <form
         method="post"
         encType="multipart/form-data"
