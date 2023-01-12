@@ -80,6 +80,7 @@ function HeadMenu() {
                           .then((err) => {});
                       }}
                       onBlur={() => {
+                        setProfiles([]);
                         setNotProfile("");
                       }}
                     />
