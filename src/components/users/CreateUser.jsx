@@ -1,8 +1,12 @@
 /* Form to create an user. */
 
+import { useNavigate } from "react-router";
 import { lgApi, addInvalidRegister } from "../../__modules__";
+import "../../css/Margin.css";
 
 const CreateUser = () => {
+  const navigate = useNavigate();
+
   /**
    * Handle the submit event and send received data.
    * @param {event} e
@@ -43,6 +47,8 @@ const CreateUser = () => {
       form_user.append("last_name", last_name);
     }
 
+    let createUser = true;
+
     // Create user
     await lgApi("accounts/users/", {
       method: "post",
@@ -51,12 +57,17 @@ const CreateUser = () => {
       },
       data: form_user,
     })
-      .then((res) => {
+      .then(() => {
         window.localStorage.setItem("profile_auth", username);
       })
       .catch((err) => {
+        createUser = false;
         addInvalidRegister(err.response.data, e.target);
       });
+
+    if (!!createUser) {
+      navigate("../activate-account", { relative: "path" });
+    }
   };
 
   return (
@@ -66,6 +77,7 @@ const CreateUser = () => {
       onSubmit={(e) => {
         submitUser(e);
       }}
+      className="mt-3"
     >
       <div className="mx-auto mt-4 w-75">
         {/* Title create profile */}
