@@ -27,7 +27,7 @@ const ActivateAccount = () => {
         return navigate("../login", { relative: "path" });
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
         addInvalidToken(
           refreshInput,
           err.response.data.detail || err.response.data
