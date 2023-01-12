@@ -91,7 +91,6 @@ const EditProfile = () => {
       data: profileForm,
     })
       .then(({ data }) => {
-        console.log(data);
       })
       .catch((err) => {
         profileUpdate = false;
