@@ -21,8 +21,8 @@
 .header {
   position: fixed;
   width: 95%;
+  background-color: #ffffff;
 
-  background-color: #81a7cc;
   z-index: 1;
   top: 0;
   left: 33px;
