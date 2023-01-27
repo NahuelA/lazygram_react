@@ -13,6 +13,9 @@ import {
   ActivateAccount,
   CreatePost,
   PrivateRoute,
+  ForgotPassword,
+  ForgotPasswordValidation,
+  SetNewPassword,
 } from "../../__modules__";
 import { PostDetail } from "../posts/PostDetail";
 
@@ -33,6 +36,18 @@ const App = () => {
 
         {/* Login */}
         <Route path="/login" element={<Login />} />
+
+        {/* Forgot password */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* Forgot password validation */}
+        <Route
+          path="/forgot-password-validation"
+          element={<ForgotPasswordValidation />}
+        />
+
+        {/* Set new password */}
+        <Route path="/set-new-password" element={<SetNewPassword />} />
 
         <Route element={<PrivateRoute />}>
           {/* Header */}
