@@ -5,7 +5,7 @@ import { addInvalidUpdate } from "../../__modules__";
 import "../../css/users/Profile.css";
 import { React, useState, useContext, useEffect } from "react";
 import AuthContext from "../../context/AuthContext";
-import { redirect, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import "../../css/Margin.css";
 import axios from "axios";
 
