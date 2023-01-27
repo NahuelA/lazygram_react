@@ -8,6 +8,9 @@ import { CreateUser } from "./components/users/CreateUser";
 import { CreatePost } from "./components/posts/CreatePost";
 import { PrivateRoute } from "./components/base/PrivateRoute";
 import { ActivateAccount } from "./components/users/ActivateAccount";
+import { ForgotPassword } from "./components/users/ForgotPassword";
+import { ForgotPasswordValidation } from "./components/users/ForgotPasswordValidation";
+import { SetNewPassword } from "./components/users/SetNewPassword";
 
 // Import utils
 import {
@@ -50,6 +53,12 @@ export {
   CreatePost,
   // Private route
   PrivateRoute,
+  //Forgot pass
+  ForgotPassword,
+  // Forgot pass validation
+  ForgotPasswordValidation,
+  // Set new password
+  SetNewPassword,
 };
 
 // Export utils
