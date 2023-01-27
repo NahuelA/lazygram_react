@@ -10,6 +10,7 @@ import axios from "axios";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 import "../../css/Margin.css";
+import { useCallback } from "react";
 
 const Profile = () => {
   /* STATES */
@@ -98,7 +99,7 @@ const Profile = () => {
       },
     })
       .then((res) => {
-        setFollowers([res.data]);
+        setFollowers(res.data);
       })
       .catch((err) => {
         console.error(err.response);
@@ -116,11 +117,33 @@ const Profile = () => {
       },
     })
       .then((res) => {
-        setFollowings([res.data]);
+        setFollowings(res.data);
       })
       .catch((err) => {
         console.error(err.response);
       });
+  };
+
+  const getFollowers = async () => {
+    // Get followers
+    await lgApi(`accounts/followers/${kwargUsername.username}`, {
+      headers: {
+        Authorization: "Bearer " + String(accessToken),
+      },
+    }).then((res) => {
+      setFollowers(res.data);
+    });
+  };
+
+  const getFollowings = async () => {
+    // Get following
+    await lgApi(`accounts/followings/${kwargUsername.username}`, {
+      headers: {
+        Authorization: "Bearer " + String(accessToken),
+      },
+    }).then((res) => {
+      setFollowings(res.data);
+    });
   };
 
   // Fetch profile
@@ -138,23 +161,8 @@ const Profile = () => {
     // For cancel load request
     const cancelToken = axios.CancelToken.source();
 
-    // Get followers
-    lgApi(`accounts/followers/${kwargUsername.username}`, {
-      headers: {
-        Authorization: "Bearer " + String(accessToken),
-      },
-    }).then((res) => {
-      setFollowers([res.data]);
-    });
-
-    // Get following
-    lgApi(`accounts/followings/${kwargUsername.username}`, {
-      headers: {
-        Authorization: "Bearer " + String(accessToken),
-      },
-    }).then((res) => {
-      setFollowings(res.data);
-    });
+    getFollowers();
+    getFollowings();
 
     return () => {
       cancelToken.cancel();
