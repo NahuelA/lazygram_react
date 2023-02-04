@@ -12,8 +12,7 @@ import "../../css/Margin.css";
 const Login = () => {
   const [errors, setErrors] = useState([]);
   const img = "http://localhost:8000/media/logo_instagram.png";
-  const { accessToken, setAccessToken } =
-    useContext(AuthContext);
+  const { accessToken, setAccessToken } = useContext(AuthContext);
 
   const loginSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +50,10 @@ const Login = () => {
         e.target[0].classList.add("is-invalid");
         e.target[1].classList.add("is-invalid");
       });
+
+    lgApi("https://lazygram-django.vercel.app/")
+      .then(console.log)
+      .catch(console.log);
   };
 
   return accessToken ? (
