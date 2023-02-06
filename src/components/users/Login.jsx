@@ -51,7 +51,8 @@ const Login = () => {
         e.target[1].classList.add("is-invalid");
       });
 
-    lgApi("https://lazygram-django.vercel.app/")
+    lgApi("https://silver-paletas-c0ac63.netlify.app/")
+      .then(console.log)
       .then(console.log)
       .catch(console.log);
   };
