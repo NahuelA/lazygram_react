@@ -1,6 +1,6 @@
 /* Login view from lazygram in react */
 
-import { lgApi } from "../../__modules__";
+import { lgApi, apiHost, frontHost } from "../../__modules__";
 import "../../css/users/Login.css";
 import React, { useContext, useState } from "react";
 import { addCache } from "../../utils/users/cache";
@@ -11,7 +11,7 @@ import "../../css/Margin.css";
 
 const Login = () => {
   const [errors, setErrors] = useState([]);
-  const img = "http://localhost:8000/media/logo_instagram.png";
+  const img = `${apiHost}/media/logo_instagram.png`;
   const { accessToken, setAccessToken } = useContext(AuthContext);
 
   const loginSubmit = async (e) => {
@@ -31,16 +31,8 @@ const Login = () => {
     })
       .then(({ data }) => {
         // Set in localStorage the username from authenticated user.
-        addCache(
-          "access_token",
-          "http://localhost:3000/access_token",
-          data.access
-        );
-        addCache(
-          "refresh_token",
-          "http://localhost:3000/refresh_token",
-          data.refresh
-        );
+        addCache("access_token", `${frontHost}access_token`, data.access);
+        addCache("refresh_token", `${frontHost}refresh_token`, data.refresh);
 
         window.localStorage.setItem("profile_auth", data.username);
         setAccessToken(data.access);
@@ -50,11 +42,6 @@ const Login = () => {
         e.target[0].classList.add("is-invalid");
         e.target[1].classList.add("is-invalid");
       });
-
-    lgApi("https://silver-paletas-c0ac63.netlify.app/")
-      .then(console.log)
-      .then(console.log)
-      .catch(console.log);
   };
 
   return accessToken ? (
