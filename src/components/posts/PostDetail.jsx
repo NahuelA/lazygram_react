@@ -5,7 +5,7 @@ import "../../css/Margin.css";
 /* Post detail */
 
 import AuthContext from "../../context/AuthContext";
-import { lgApi } from "../../__modules__";
+import { lgApi, apiHost } from "../../__modules__";
 import "../../css/posts/ListPosts.css";
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -13,6 +13,10 @@ import {
   BsFillChatFill,
   BsFillBookmarkFill,
   BsShareFill,
+  BsThreeDots,
+  BsTrash,
+  BsPencilSquare,
+  BsExclamationCircle,
 } from "react-icons/bs";
 import axios from "axios";
 import { likePost, inputComment } from "../../utils/posts/posts";
@@ -22,7 +26,7 @@ const PostDetail = () => {
   const [comments, setComments] = useState([]);
   const idPost = useParams();
   const [post, setPost] = useState([]);
-  const httpMedia = "http://localhost:8000/media/";
+  const httpMedia = `${apiHost}media/`;
 
   let picture;
   let profilePictureNull;
@@ -118,8 +122,8 @@ const PostDetail = () => {
         onClick={(e) => handledPosts(e)}
       >
         {/* User profile image */}
-        <div className="row row-profile-pic align-items-center">
-          <div className="col-sm-1">
+        <div className="head-post-container">
+          <div className="profile-img-post-container">
             <Link to={"../.."} relative="path">
               <img
                 className="profile-img-post rounded-circle go-to-profile"
@@ -131,7 +135,7 @@ const PostDetail = () => {
           </div>
 
           {/* User profile name */}
-          <div className="col-sm">
+          <div className="profile-name-container">
             <Link to={"../.."} relative="path">
               <h5 className="h5 go-to-profile">
                 {post?.profile?.user?.username}
@@ -139,12 +143,34 @@ const PostDetail = () => {
             </Link>
           </div>
 
-          {/* Created */}
-          <div className="post-created">
-            <p className="h6 pt-1 px-1 text-black-50">
-              Created: {post?.created}
-            </p>
+          {/* Options */}
+          <div className="option-container">
+            <BsThreeDots
+              className="options"
+              onClick={() => {
+                let options = document.querySelector("#option-square");
+                options.classList.toggle("hidden");
+              }}
+            ></BsThreeDots>
+            <div className="options-square" id="option-square">
+              <ul className="post-menu-options">
+                <li className="li-post-menu-option">
+                  Remove <BsTrash></BsTrash>
+                </li>
+                <li className="li-post-menu-option">
+                  Edit <BsPencilSquare></BsPencilSquare>
+                </li>
+                <li className="li-post-menu-option">
+                  Report <BsExclamationCircle></BsExclamationCircle>
+                </li>
+              </ul>
+            </div>
           </div>
+        </div>
+
+        {/* Created */}
+        <div className="post-created">
+          <p className="h6 pt-1 px-1 text-black-50">Created: {post?.created}</p>
         </div>
 
         {/* Post img */}
