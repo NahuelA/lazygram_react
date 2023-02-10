@@ -46,11 +46,11 @@ const App = () => {
           element={<ForgotPasswordValidation />}
         />
 
-        {/* Set new password */}
-        <Route path="/set-new-password" element={<SetNewPassword />} />
-
         <Route element={<PrivateRoute />}>
           {/* Header */}
+
+          {/* Set new password */}
+          <Route path="/set-new-password" element={<SetNewPassword />} />
 
           {/* Profile */}
           <Route path="/profile/:username" element={<Profile />} />
