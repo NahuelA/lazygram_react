@@ -1,6 +1,6 @@
 /* Forgot password validation */
 
-import { lgApi, addInvalidToken } from "../../__modules__";
+import { lgApi, addInvalidToken, frontHost } from "../../__modules__";
 import "../../css/ActiveAccount.css";
 import { useNavigate } from "react-router";
 import { addCache } from "../../utils/users/cache";
@@ -28,13 +28,10 @@ const ForgotPasswordValidation = () => {
       data: access,
     })
       .then((res) => {
-        console.log(res);
-        addCache(
-          "access_token",
-          "http://localhost:3000/access_token",
-          res.data
-        );
-        setAccessToken(res.data);
+        addCache("access_token", `${frontHost}access_token`, res.data.access);
+
+        window.localStorage.setItem("profile_auth", res.data.username);
+        setAccessToken(res.data.access);
         navigate("../set-new-password", { relative: "path" });
       })
       .catch((err) => {
