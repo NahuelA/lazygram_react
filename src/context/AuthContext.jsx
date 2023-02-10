@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import { lgApi } from "../__modules__";
+import { lgApi, frontHost } from "../__modules__";
 import { addCache } from "../utils/users/cache";
 import axios from "axios";
 
@@ -72,12 +72,12 @@ const AuthProvider = ({ children }) => {
                   // Add refresh and access tokens in cache
                   addCache(
                     "refresh_token",
-                    "http://localhost:3000/refresh_token",
+                    `${frontHost}refresh_token`,
                     data.refresh
                   );
                   addCache(
                     "access_token",
-                    "http://localhost:3000/access_token",
+                    `${frontHost}access_token`,
                     data.access
                   );
                   setAccessToken(data.access);
