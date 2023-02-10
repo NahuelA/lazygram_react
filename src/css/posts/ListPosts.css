@@ -9,11 +9,6 @@
   height: 70px;
 }
 
-.row-profile-pic {
-  display: grid;
-  grid-template-columns: 15% 30%;
-}
-
 .post-created {
   display: grid;
   grid-column: 1/5;
@@ -76,4 +71,86 @@
 .go-to-profile:hover {
   cursor: pointer;
   opacity: 0.8;
+}
+
+
+/* Post options */
+.head-post-container{
+  
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 15% 30% 55%;
+}
+
+.profile-name-container{
+  display: grid;
+  align-items: center;
+}
+
+.profile-img-post-container{
+  display: grid;
+  align-items: center;
+}
+
+.option-container{
+  display: grid;
+  position: relative;
+  justify-content: end;
+  padding: 5px;
+}
+
+
+.options{
+
+  text-align: end;
+  height: 1.5em;
+  width: 1.5em;
+  border: none;
+  background-color: transparent;
+}
+.options:hover{
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.options-square{
+
+  display: none;
+
+  width: 150px;
+  position: absolute;
+  left: 320px;
+  top: 30px;
+
+}
+
+.post-menu-options{
+  
+  list-style: none;
+  padding: 10px;
+  border-radius: 4%;
+  background-color: #fff;
+  box-shadow: 10px 5px 30px -15px
+}
+
+.li-post-menu-option{
+
+  display: grid;
+  grid-template-columns: 60% 10%;
+  align-items: center;
+
+  padding: 5px;
+  border-radius: 4%;
+}
+
+.li-post-menu-option:hover{
+
+  cursor: pointer;
+  opacity: 0.7;
+  background-color: #0d6efd;
+}
+
+.hidden{
+
+  display: grid;
 }
