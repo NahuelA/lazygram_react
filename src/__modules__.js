@@ -12,6 +12,9 @@ import { ForgotPassword } from "./components/users/ForgotPassword";
 import { ForgotPasswordValidation } from "./components/users/ForgotPasswordValidation";
 import { SetNewPassword } from "./components/users/SetNewPassword";
 
+// Import axios
+import axios from "axios";
+
 // Import utils
 import {
   addInvalidUpdate,
@@ -19,7 +22,9 @@ import {
   addInvalidToken,
 } from "./utils/users/profile";
 
-import axios from "axios";
+// Host
+const apiHost = "http://localhost:8000/";
+const frontHost = "http://localhost:3000/";
 
 /**
  * Axios instance
@@ -28,7 +33,7 @@ import axios from "axios";
  * - headers: "Content-Type": "application/json; charset=utf-8",
  */
 const lgApi = axios.create({
-  baseURL: "http://localhost:8000/",
+  baseURL: apiHost,
   headers: {
     "Content-Type": "application/json; charset=utf-8",
   },
@@ -36,6 +41,8 @@ const lgApi = axios.create({
 
 // Export Axios instance
 export { lgApi };
+// Export host
+export { apiHost, frontHost };
 
 // Export components
 export {
