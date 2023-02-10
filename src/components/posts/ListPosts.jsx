@@ -1,6 +1,6 @@
 /* List posts from lazygram with react */
 
-import { lgApi } from "../../__modules__";
+import { lgApi, apiHost } from "../../__modules__";
 import "../../css/posts/ListPosts.css";
 import React, { useContext, useEffect, useState } from "react";
 import {
@@ -8,6 +8,8 @@ import {
   BsFillChatFill,
   BsFillBookmarkFill,
   BsShareFill,
+  BsThreeDots,
+  BsExclamationCircle,
 } from "react-icons/bs";
 import "../../css/Margin.css";
 
@@ -21,7 +23,7 @@ const ListPosts = () => {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const navigation = useNavigate();
-  const httpMedia = "http://localhost:8000/media/";
+  const httpMedia = `${apiHost}media/`;
 
   let picture;
   let profilePictureNull;
@@ -138,8 +140,8 @@ const ListPosts = () => {
             onClick={(e) => handledPosts(e)}
           >
             {/* User profile image */}
-            <div className="row row-profile-pic align-items-center">
-              <div className="col-sm-1">
+            <div className="head-post-container">
+              <div className="profile-img-post-container">
                 <img
                   className="profile-img-post rounded-circle go-to-profile"
                   id={`id_img_prof_post${post.id}`}
@@ -150,7 +152,7 @@ const ListPosts = () => {
               </div>
 
               {/* User profile name */}
-              <div className="col-sm">
+              <div className="profile-name-container">
                 <h5
                   className="h5 go-to-profile"
                   onClick={(e) => goToProfile(e)}
@@ -159,12 +161,30 @@ const ListPosts = () => {
                 </h5>
               </div>
 
-              {/* Created */}
-              <div className="post-created">
-                <p className="h6 pt-1 px-1 text-black-50">
-                  Created: {post.created}
-                </p>
+              {/* Options */}
+              <div className="option-container">
+                <BsThreeDots
+                  className="options"
+                  onClick={() => {
+                    let options = document.querySelector("#option-square");
+                    options.classList.toggle("hidden");
+                  }}
+                ></BsThreeDots>
+                <div className="options-square" id="option-square">
+                  <ul className="post-menu-options">
+                    <li className="li-post-menu-option">
+                      Report <BsExclamationCircle></BsExclamationCircle>
+                    </li>
+                  </ul>
+                </div>
               </div>
+            </div>
+
+            {/* Created */}
+            <div className="post-created">
+              <p className="h6 pt-1 px-1 text-black-50">
+                Created: {post.created}
+              </p>
             </div>
 
             {/* Post img */}
