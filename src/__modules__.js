@@ -23,13 +23,13 @@ import {
 } from "./utils/users/profile";
 
 // Host
-const apiHost = "http://localhost:8000/";
-const frontHost = "http://localhost:3000/";
+const apiHost = "https://www.lazygram.online/api/";
+const frontHost = "https://www.lazygram.online/";
 
 /**
  * Axios instance
  * Parameters by default:
- * - baseURL: http://localhost:8000/,
+ * - baseURL: "https://www.lazygram.online/api/",
  * - headers: "Content-Type": "application/json; charset=utf-8",
  */
 const lgApi = axios.create({
