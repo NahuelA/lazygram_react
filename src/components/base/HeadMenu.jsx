@@ -1,7 +1,7 @@
 import "../../css/Main.css";
 import React, { useState, useContext } from "react";
 import AuthContext from "../../context/AuthContext";
-import { lgApi } from "../../__modules__";
+import { lgApi, apiHost } from "../../__modules__";
 
 import {
   BsHouse,
@@ -22,7 +22,7 @@ function HeadMenu() {
   // If does not match any profile, update this state, else return empty string.
   const [notProfile, setNotProfile] = useState("");
   const { accessToken, setAccessToken } = useContext(AuthContext);
-  const httpMedia = "http://localhost:8000/media/";
+  const httpMedia = `${apiHost}/media/`;
   let profilePicture; // Profile with a null profile picture: set an empty profile picture by default.
   let profileDoesNotMatch = (
     <p className="border border-2 p-2 fs-6 text-secondary">{notProfile}</p>
@@ -51,7 +51,16 @@ function HeadMenu() {
 
                 {/* Input search */}
                 <li className="nav-item">
-                  <div className="grid-search position-relative">
+                  <div
+                    className="grid-search position-relative"
+                    onBlur={(e) => {
+                      const interval = setInterval(() => {
+                        setProfiles([]);
+                        setNotProfile("");
+                        clearInterval(interval);
+                      }, 100);
+                    }}
+                  >
                     <input
                       className="form-control font"
                       id="search-input"
@@ -79,10 +88,6 @@ function HeadMenu() {
                           })
                           .then((err) => {});
                       }}
-                      onBlur={() => {
-                        setProfiles([]);
-                        setNotProfile("");
-                      }}
                     />
                     <div className="grapper-results-search">
                       {profiles?.length !== 0
@@ -94,7 +99,13 @@ function HeadMenu() {
                               profilePicture = value?.picture;
                             }
                             return (
-                              <div key={i}>
+                              <div
+                                key={i}
+                                onClick={(e) => {
+                                  setProfiles([]);
+                                  setNotProfile("");
+                                }}
+                              >
                                 <div className="grapper-searchs border border-2 p-2 rounded-3">
                                   <div>
                                     <Link
@@ -199,7 +210,7 @@ function HeadMenu() {
                   onClick={async () => {
                     // Logout
                     await lgApi({
-                      url: "http://localhost:8000/accounts/logout/",
+                      url: `${apiHost}accounts/logout/`,
                       method: "post",
                       headers: {
                         "Content-Type": "multipart/form-data",
