@@ -5,13 +5,21 @@ import { lgApi } from "../../__modules__";
  * @param {*} e
  */
 async function likePost(e, accessToken) {
-  if (String(e.nativeEvent.path[1].id).startsWith("id_like_post")) {
-    let url = `posts/${e.nativeEvent.path[4].id}/`;
+  if (String(e.target.parentNode.id).startsWith("id_like_post")) {
+    // Like component ID
+    let likesComponentId =
+      e.target.parentElement.parentElement.nextSibling.firstChild.id;
+
+    // Post id
+    let idPost =
+      e.target.parentElement.parentElement.parentElement.parentElement.id;
+
+    // Like component
     let likesComponent = document.querySelector(
-      `#id_show_likes_${e.nativeEvent.path[4].id}`
+      `#id_show_likes_${likesComponentId.split("_")[3]}`
     );
 
-    await lgApi(url, {
+    await lgApi(`posts/${idPost}/`, {
       method: "put",
       headers: {
         Authorization: "Bearer " + String(accessToken),
@@ -53,8 +61,7 @@ async function commentPost(e, newComment, accessToken) {
       },
       data: form_comment,
     })
-      .then((res) => {
-      })
+      .then((res) => {})
       .catch((err) => {
         console.error(err.response.data);
       });
@@ -132,8 +139,7 @@ async function replyComment(e, accessToken) {
         },
         data: form_comment,
       })
-        .then((res) => {
-        })
+        .then((res) => {})
         .catch((err) => {
           console.error(err.response.data);
         });
