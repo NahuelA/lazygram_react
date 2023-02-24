@@ -137,7 +137,9 @@ const ListPosts = () => {
             key={i}
             id={post.id}
             className="row w-50 mx-auto mt-4  mb-2 p-2 posts border border-4"
-            onClick={(e) => handledPosts(e)}
+            onClick={(e) => {
+              handledPosts(e);
+            }}
           >
             {/* User profile image */}
             <div className="head-post-container">
