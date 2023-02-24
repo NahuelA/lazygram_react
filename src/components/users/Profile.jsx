@@ -1,6 +1,6 @@
 /* Profile view */
 
-import { lgApi } from "../../__modules__";
+import { lgApi, apiHost } from "../../__modules__";
 import "../../css/users/Profile.css";
 import { BsFillBookmarkFill, BsFillGrid3X3GapFill } from "react-icons/bs";
 import { useParams } from "react-router";
@@ -10,7 +10,6 @@ import axios from "axios";
 import { useContext } from "react";
 import AuthContext from "../../context/AuthContext";
 import "../../css/Margin.css";
-import { useCallback } from "react";
 
 const Profile = () => {
   /* STATES */
@@ -41,7 +40,7 @@ const Profile = () => {
   const picture =
     profile?.picture !== null
       ? profile?.picture
-      : "http://localhost:8000/media/user_circle.svg";
+      : `${apiHost}media/user_circle.svg`;
 
   /**
    * Fetch to profile
